@@ -1,0 +1,18 @@
+{
+  "manifest_version": 2,
+  "version": "0.0.1",
+  "name": "Jira in order",
+  "description": "Easily prioritize tasks in Jira",
+  "web_accessible_resources": ["logo.png"],
+  "browser_action": {
+    "default_icon": "logo.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.atlassian.net/secure/RapidBoard.jspa*"],
+      "js": ["dist/main.js"],
+      "css": ["dist/main.css"]
+    }
+  ],
+  "permissions": ["activeTab"]
+}
