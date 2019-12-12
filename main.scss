@@ -1,0 +1,108 @@
+body {
+  // transitions
+  transition: transform 0.4s ease-in-out, transform-origin 0.04s linear, width 0.4s linear;
+
+  .ghx-issue,
+  .ghx-issue > * {
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  &.show-task-overlays .task-overlay {
+    transition: opacity 0.2s 0.3s ease-in-out;
+  }
+
+  // activation
+  &.show-task-overlays {
+    transform: scale(0.85);
+    .ghx-issue {
+      background: none;
+      > * {
+        opacity: 0.1;
+      }
+      > .task-overlay {
+        opacity: 1;
+      }
+    }
+    .ghx-column {
+      background-color: white !important;
+    }
+  }
+
+  // task overlay styling
+
+  .task-overlay {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: chocolate;
+    color: white;
+    display: grid;
+    align-items: center;
+    grid-template: 'ordinal tasks' / auto 1fr;
+    > .ordinal {
+      grid-area: ordinal;
+      text-align: center;
+      padding: 0 40px;
+    }
+    > .tasks {
+      grid-area: tasks;
+      white-space: normal;
+      overflow-x: visible;
+      overflow-y: scroll;
+      font-size: +1.2em;
+      text-align: left;
+      padding-right: 40px;
+      list-style: none;
+      scrollbar-width: 0;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  }
+
+  // (some helper functions)
+  // Linear interpolation: get value some fraction of the way from one value to another
+  @function lerp($from, $to, $fraction) {
+    @return $from * (1 - $fraction) + $to * $fraction;
+  }
+
+  // The inverse of `lerp`
+  @function invlerp($from, $to, $value) {
+    @return ($value - $from) / ($to - $from);
+  }
+
+  // Changing styles based on the priority of the card
+  // To read these, look to the values supplied to `lerp`
+  //      For ordinal 1 the rules will use the values supplied as the $from param
+  //      For ordinal 10 they will use the value supplied as $to
+  @each $ordinal in 1 2 3 4 5 6 7 8 9 10 {
+    $fraction: invlerp(1, 10, $ordinal);
+
+    .task-overlay.ordinal-#{ $ordinal } {
+      filter: contrast(lerp(1, 0.55, $fraction))
+        brightness(lerp(1, 1.9, $fraction))
+        saturate(lerp(2.8, 1.2, $fraction));
+      color: rgba(255, 255, 255, lerp(1, 0.1, $fraction));
+    }
+
+    .task-overlay.ordinal-#{ $ordinal } > .ordinal {
+      font-size: +lerp(5em, 2.75em, $fraction);
+    }
+  }
+
+  // custom styling to look realy swish on my machine
+
+  &.wills-css-injector {
+    &.show-task-overlays {
+      width: 200%;
+      transform: scale(0.7);
+    }
+    .task-overlay > .tasks {
+      font-size: +2em;
+    }
+  }
+}
