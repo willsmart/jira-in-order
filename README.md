@@ -2,11 +2,6 @@
 
 Chrome browser extension to easily prioritize tasks in Jira
 
-## Installation using binary
-
-1. Download `jira-in-order.crx` from the latest release.
-2. Load into Chrome
-
 ## Installation from source
 
 1. Clone this repo `git@github.com:willsmart/jira-in-order.git` or otherwise get the codebase onto a local drive
